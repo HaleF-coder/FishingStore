@@ -1,3 +1,10 @@
+# Stores the fishing products, prices, quantities, and reorder levels.
+inventory = {
+    "fishing lure": {"price": 6.99, "qty": 25, "reorder": 8},
+    "fishing line": {"price": 9.99, "qty": 15, "reorder": 5},
+    "hooks": {"price": 4.99, "qty": 30, "reorder": 10}
+}
+
 # This function displays the main menu options.
 def show_menu():
     print("\n===== FISHING STORE INVENTORY MANAGER =====")
@@ -9,6 +16,16 @@ def show_menu():
     print("6. Run 30-day simulation")
     print("7. Save and exit")
 
+# This function displays every fishing product and its details.
+def view_inventory():
+    print("\n===== CURRENT INVENTORY =====")
+
+    for item in inventory:
+        print("Product:", item)
+        print("Price: $", inventory[item]["price"])
+        print("Quantity:", inventory[item]["qty"])
+        print("Reorder Level:", inventory[item]["reorder"])
+        print("-----------------------------")
 
 # This function runs the main menu until the user chooses to exit.
 def main():
@@ -22,7 +39,7 @@ def main():
             print("Saving data and exiting the program. Goodbye!")
 
         elif choice == "1":
-            print("Coming soon")
+            view_inventory()
 
         elif choice == "2":
             print("Coming soon")
