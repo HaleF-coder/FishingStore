@@ -27,6 +27,35 @@ def view_inventory():
         print("Reorder Level:", inventory[item]["reorder"])
         print("-----------------------------")
 
+# This function adds a new product or updates an existing product.
+def add_item():
+    item = input("Enter the product name: ").lower()
+
+    if item in inventory:
+        print("Current quantity:", inventory[item]["qty"])
+        amount = input("Enter the quantity to add: ")
+
+        if amount.isdigit():
+            inventory[item]["qty"] = inventory[item]["qty"] + int(amount)
+            print("Inventory updated successfully.")
+        else:
+            print("Invalid quantity. Please enter a whole number.")
+
+    else:
+        price = input("Enter the product price: ")
+        qty = input("Enter the starting quantity: ")
+        reorder = input("Enter the reorder level: ")
+
+        if price.replace(".", "", 1).isdigit() and qty.isdigit() and reorder.isdigit():
+            inventory[item] = {
+                "price": float(price),
+                "qty": int(qty),
+                "reorder": int(reorder)
+            }
+            print("New product added successfully.")
+        else:
+            print("Invalid information. Please enter valid numbers.")
+
 # This function runs the main menu until the user chooses to exit.
 def main():
     choice = ""
@@ -42,7 +71,7 @@ def main():
             view_inventory()
 
         elif choice == "2":
-            print("Coming soon")
+            add_item()
 
         elif choice == "3":
             print("Coming soon")
