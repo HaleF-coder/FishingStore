@@ -1,9 +1,38 @@
+import csv
+
 # Stores the fishing products, prices, quantities, and reorder levels.
-inventory = {
-    "fishing lure": {"price": 6.99, "qty": 25, "reorder": 8},
-    "fishing line": {"price": 9.99, "qty": 15, "reorder": 5},
-    "hooks": {"price": 4.99, "qty": 30, "reorder": 10}
-}
+inventory = {}
+
+# This function loads inventory information from the CSV file.
+def load_inventory():
+    with open("inventory.csv", "r", newline="") as file:
+        reader = csv.reader(file)
+        next(reader)
+
+        for row in reader:
+            item = row[0]
+
+            inventory[item] = {
+                "price": float(row[1]),
+                "qty": int(row[2]),
+                "reorder": int(row[3])
+            }
+
+
+# This function saves the current inventory to the CSV file.
+def save_inventory():
+    with open("inventory.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow(["item", "price", "qty", "reorder"])
+
+        for item in inventory:
+            writer.writerow([
+                item,
+                inventory[item]["price"],
+                inventory[item]["qty"],
+                inventory[item]["reorder"]
+            ])
 
 # This function displays the main menu options.
 def show_menu():
@@ -65,7 +94,8 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "7":
-            print("Saving data and exiting the program. Goodbye!")
+             save_inventory()
+             print("Saving data and exiting the program. Goodbye!")
 
         elif choice == "1":
             view_inventory()
@@ -89,4 +119,5 @@ def main():
             print("Invalid choice. Please select an option from 1 to 7.")
 
 
+load_inventory()
 main()
