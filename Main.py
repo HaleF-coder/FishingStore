@@ -3,6 +3,9 @@ import csv
 # Stores the fishing products, prices, quantities, and reorder levels.
 inventory = {}
 
+# Stores all recorded fishing store sales.
+sales = []
+
 # This function loads inventory information from the CSV file.
 def load_inventory():
     with open("inventory.csv", "r", newline="") as file:
@@ -33,6 +36,74 @@ def save_inventory():
                 inventory[item]["qty"],
                 inventory[item]["reorder"]
             ])
+
+# This function loads previous sales from the CSV file.
+def load_sales():
+    with open("sales.csv", "r", newline="") as file:
+        reader = csv.reader(file)
+        next(reader)
+
+        for row in reader:
+            sale = {
+                "date": row[0],
+                "item": row[1],
+                "qty": int(row[2]),
+                "total": float(row[3])
+            }
+
+            sales.append(sale)
+
+# This function saves all recorded sales to the CSV file.
+def save_sales():
+    with open("sales.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow(["date", "item", "qty", "total"])
+
+        for sale in sales:
+            writer.writerow([
+                sale["date"],
+                sale["item"],
+                sale["qty"],
+                sale["total"]
+            ])
+
+# This function records a sale and updates inventory.
+def record_sale():
+    item = input("Enter the product sold: ").lower()
+
+    if item in inventory:
+        qty = input("Enter the quantity sold: ")
+
+        if qty.isdigit():
+            qty = int(qty)
+
+            if qty > 0 and qty <= inventory[item]["qty"]:
+                total = qty * inventory[item]["price"]
+
+                inventory[item]["qty"] = inventory[item]["qty"] - qty
+
+                sale = {
+                    "date": input("Enter the sale date (YYYY-MM-DD): "),
+                    "item": item,
+                    "qty": qty,
+                    "total": total
+                }
+
+                sales.append(sale)
+
+                print("Sale recorded successfully.")
+                print("Sale total: $", round(total, 2))
+
+            else:
+                print("Invalid quantity or not enough inventory.")
+
+        else:
+            print("Invalid quantity. Enter a whole number.")
+
+    else:
+        print("Product not found in inventory.")
+
 
 # This function displays the main menu options.
 def show_menu():
@@ -95,6 +166,7 @@ def main():
 
         if choice == "7":
              save_inventory()
+             save_sales()
              print("Saving data and exiting the program. Goodbye!")
 
         elif choice == "1":
@@ -104,7 +176,7 @@ def main():
             add_item()
 
         elif choice == "3":
-            print("Coming soon")
+            record_sale()
 
         elif choice == "4":
             print("Coming soon")
@@ -120,4 +192,5 @@ def main():
 
 
 load_inventory()
+load_sales()
 main()
